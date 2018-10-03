@@ -10,7 +10,7 @@ import java.net.*;
  * February 2007
  *
  */
-public class TcpClientSimpleNB {
+public class Client {
     static int sleepTime_ = 5000; // milliseconds
     static int bufferSize_ = 80; // a line
     static int soTimeout_ = 10; // milliseconds

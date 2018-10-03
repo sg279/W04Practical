@@ -10,9 +10,9 @@ import java.net.*;
  * February 2007
  *
  */
-public class TcpServerSimpleNB {
+public class Server {
 
-    static int           port_ = ZZZZ; // You need to change this!
+    static int           port_ = 51261; // You need to change this!
     static ServerSocket  server_;
     static int           sleepTime_ = 100; // milliseconds
     static int           bufferSize_ = 80; // a line
