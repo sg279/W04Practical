@@ -12,10 +12,10 @@ import java.net.*;
  */
 public class Server {
 
-    static int           port_ = 51261; // You need to change this!
+    static int           port_ = 51251; // You need to change this!
     static ServerSocket  server_;
     static int           sleepTime_ = 100; // milliseconds
-    static int           bufferSize_ = 80; // a line
+    static int           bufferSize_ = 140; // a line
     static int           soTimeout_ = 10; // 10 ms
 
     public static void main(String[] args) {
@@ -46,8 +46,11 @@ public class Server {
 
             if (b > 0) {
                 String s = new String(buffer);
-                System.out.println("Received " + b + " bytes --> " + s);
 
+                TimeStamp timeStamp = new TimeStamp();
+                DirAndFile dirAndFile = new DirAndFile();
+                String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/"+timeStamp.getDirectory()+"/";
+                dirAndFile.writeFile(new String[]{directory,timeStamp.getFile(),s});
                 System.out.println("Sending " + b + " bytes");
                 tx.write(buffer, 0, b); // send data back to client
 

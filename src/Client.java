@@ -12,7 +12,7 @@ import java.net.*;
  */
 public class Client {
     static int sleepTime_ = 5000; // milliseconds
-    static int bufferSize_ = 80; // a line
+    static int bufferSize_ = 140; // a line
     static int soTimeout_ = 10; // milliseconds
 
     public static void main(String[] args) {
@@ -52,6 +52,7 @@ public class Client {
             b = rx.read(buffer); // from server
             if (b > 0) {
                 String s = new String(buffer); /// assume it is a printable string
+                s.
                 System.out.println("Received " + b + " bytes --> " + s);
             }
 
