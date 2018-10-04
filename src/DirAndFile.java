@@ -24,55 +24,37 @@ public class DirAndFile {
 
         if (dir.exists()) {
             System.out.println("++ File already exists: " + dirName);
-            fileName = dirName + File.separator + fileName;
-            File file = new File(fileName);
-
-            if (file.exists()) {
-                System.out.println("++ File already exists: " + fileName);
-                System.exit(0);
-            }
-
-            try {
-                FileWriter fw = new FileWriter(file);
-                fw.write(text);
-                fw.flush();
-                fw.close();
-            }
-            catch (IOException e) {
-                System.out.println("IOException - write(): " + e.getMessage());
-            }
-
+            write(dirName, fileName, text);
             System.out.println("++ Wrote \"" + text + "\" to file: " + fileName);
-            System.exit(0);
         }
-
-        if (dir.mkdir()) {
+        else if (dir.mkdir()) {
             System.out.println("++ Created directory: " + dirName);
-            fileName = dirName + File.separator + fileName;
-            File file = new File(fileName);
-
-            if (file.exists()) {
-                System.out.println("++ File already exists: " + fileName);
-                System.exit(0);
-            }
-
-            try {
-                FileWriter fw = new FileWriter(file);
-                fw.write(text);
-                fw.flush();
-                fw.close();
-            }
-            catch (IOException e) {
-                System.out.println("IOException - write(): " + e.getMessage());
-            }
-
+            write(dirName, fileName, text);
             System.out.println("++ Wrote \"" + text + "\" to file: " + fileName);
         }
         else {
             System.out.println("++ Failed to create directory: " + dirName);
-            System.exit(0);
         }
 
 
+    }
+
+    private void write(String dirName, String fileName, String text){
+        fileName = dirName + File.separator + fileName;
+        File file = new File(fileName);
+
+        if (file.exists()) {
+            System.out.println("++ File already exists: " + fileName);
+        }
+
+        try {
+            FileWriter fw = new FileWriter(file);
+            fw.write(text);
+            fw.flush();
+            fw.close();
+        }
+        catch (IOException e) {
+            System.out.println("IOException - write(): " + e.getMessage());
+        }
     }
 }

@@ -22,40 +22,40 @@ public class Server {
         startServer();
 
         try {
-            Socket       connection;
-            OutputStream tx;
-            InputStream  rx;
 
-            connection = server_.accept(); // waits for connection
-            tx = connection.getOutputStream();
-            rx = connection.getInputStream();
-            server_.close(); // no need to wait now
+            while (true){
+                Socket       connection;
+                OutputStream tx;
+                InputStream  rx;
+                connection = server_.accept(); // waits for connection
+                tx = connection.getOutputStream();
+                rx = connection.getInputStream();
+                server_.close(); // no need to wait now
 
-            System.out.println("New connection ... " +
-                    connection.getInetAddress().getHostName() + ":" +
-                    connection.getPort());
+                System.out.println("New connection ... " +
+                        connection.getInetAddress().getHostName() + ":" +
+                        connection.getPort());
 
-            byte[] buffer = new byte[bufferSize_];
-            int b = 0;
-            while (b < 1) {
-                Thread.sleep(sleepTime_);
+                byte[] buffer = new byte[bufferSize_];
+                int b = 0;
+                while (b < 1) {
+                    Thread.sleep(sleepTime_);
 
-                buffer = new byte[bufferSize_];
-                b = rx.read(buffer);
+                    buffer = new byte[bufferSize_];
+                    b = rx.read(buffer);
+                }
+
+                if (b > 0) {
+                    byte[] message = new byte[b];
+                    System.arraycopy(buffer, 0, message, 0, b);
+                    String s = new String(message);
+                    TimeStamp timeStamp = new TimeStamp();
+                    DirAndFile dirAndFile = new DirAndFile();
+                    String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/"+timeStamp.getDirectory()+"/";
+                    dirAndFile.writeFile(new String[]{directory,timeStamp.getFile(),s});
+                }
             }
 
-            if (b > 0) {
-                String s = new String(buffer);
-
-                TimeStamp timeStamp = new TimeStamp();
-                DirAndFile dirAndFile = new DirAndFile();
-                String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/"+timeStamp.getDirectory()+"/";
-                dirAndFile.writeFile(new String[]{directory,timeStamp.getFile(),s});
-                System.out.println("Sending " + b + " bytes");
-                tx.write(buffer, 0, b); // send data back to client
-
-                connection.close(); // finished
-            }
 
         }
 

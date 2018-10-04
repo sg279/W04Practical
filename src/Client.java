@@ -52,7 +52,6 @@ public class Client {
             b = rx.read(buffer); // from server
             if (b > 0) {
                 String s = new String(buffer); /// assume it is a printable string
-                s.
                 System.out.println("Received " + b + " bytes --> " + s);
             }
 
