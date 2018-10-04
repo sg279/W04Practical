@@ -21,12 +21,11 @@ public class Server {
     public static void main(String[] args) {
         startServer();
 
-        try {
-
-            while (true){
-                Socket       connection;
+        while (true) {
+            try {
+                Socket connection;
                 OutputStream tx;
-                InputStream  rx;
+                InputStream rx;
                 connection = server_.accept(); // waits for connection
                 tx = connection.getOutputStream();
                 rx = connection.getInputStream();
@@ -51,22 +50,19 @@ public class Server {
                     String s = new String(message);
                     TimeStamp timeStamp = new TimeStamp();
                     DirAndFile dirAndFile = new DirAndFile();
-                    String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/"+timeStamp.getDirectory()+"/";
-                    dirAndFile.writeFile(new String[]{directory,timeStamp.getFile(),s});
+                    String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
+                    dirAndFile.writeFile(new String[]{directory, timeStamp.getFile(), s});
                 }
             }
-
-
-        }
-
-        catch (SocketTimeoutException e) {
-            // no incoming data - just ignore
-        }
-        catch (InterruptedException e) {
-            System.err.println("Interrupted Exception: " + e.getMessage());
-        }
-        catch (IOException e) {
-            System.err.println("IO Exception: " + e.getMessage());
+            catch (SocketTimeoutException e) {
+                // no incoming data - just ignore
+            }
+            catch (InterruptedException e) {
+                System.err.println("Interrupted Exception: " + e.getMessage());
+            }
+            catch (IOException e) {
+                System.err.println("IO Exception: " + e.getMessage());
+            }
         }
     }
 

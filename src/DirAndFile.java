@@ -11,10 +11,6 @@ import java.io.*;
 public class DirAndFile {
 
     public void writeFile(String args[]) {
-        /*if (args.length != 1) {
-            System.out.println("  usage:\n java DirAndFile <word>");
-            System.exit(0);
-        }*/
 
         String dirName = new String(args[0]);
         String fileName = new String(args[1]);
