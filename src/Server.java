@@ -16,7 +16,6 @@ public class Server {
     static ServerSocket  server_;
     static int           sleepTime_ = 100; // milliseconds
     static int           bufferSize_ = 140; // a line
-    static int           soTimeout_ = 10; // 10 ms
 
     public static void main(String[] args) {
         startServer();
@@ -24,10 +23,8 @@ public class Server {
         while (true) {
             try {
                 Socket connection;
-                OutputStream tx;
                 InputStream rx;
                 connection = server_.accept(); // waits for connection
-                tx = connection.getOutputStream();
                 rx = connection.getInputStream();
                 server_.close(); // no need to wait now
 
