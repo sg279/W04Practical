@@ -21,7 +21,7 @@ public class DirAndFile {
         if (dir.exists()) {
             System.out.println("++ File already exists: " + dirName);
             write(dirName, fileName, text);
-            System.out.println("++ Wrote \"" + text + "\" to file: " + fileName);
+            System.out.println("++ Wrote " + text + " to file: " + fileName);
         }
         else if (dir.mkdir()) {
             System.out.println("++ Created directory: " + dirName);
