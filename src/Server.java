@@ -26,7 +26,7 @@ public class Server {
                 InputStream rx;
                 connection = server_.accept(); // waits for connection
                 rx = connection.getInputStream();
-                server_.close(); // no need to wait now
+                //server_.close(); // no need to wait now
 
                 System.out.println("New connection ... " +
                         connection.getInetAddress().getHostName() + ":" +
@@ -39,6 +39,10 @@ public class Server {
 
                     buffer = new byte[bufferSize_];
                     b = rx.read(buffer);
+                    if (connection.getInetAddress().isReachable(10)){
+                        System.out.println("Client disconnected");
+                        break;
+                    }
                 }
 
                 if (b > 0) {

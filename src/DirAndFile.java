@@ -26,7 +26,7 @@ public class DirAndFile {
         else if (dir.mkdir()) {
             System.out.println("++ Created directory: " + dirName);
             write(dirName, fileName, text);
-            System.out.println("++ Wrote \"" + text + "\" to file: " + fileName);
+            System.out.println("++ Wrote " + text + " to file: " + fileName);
         }
         else {
             System.out.println("++ Failed to create directory: " + dirName);
