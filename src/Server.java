@@ -26,34 +26,37 @@ public class Server {
                 InputStream rx;
                 connection = server_.accept(); // waits for connection
                 rx = connection.getInputStream();
+                boolean connectionActive;
                 //server_.close(); // no need to wait now
 
                 System.out.println("New connection ... " +
                         connection.getInetAddress().getHostName() + ":" +
                         connection.getPort());
 
-                byte[] buffer = new byte[bufferSize_];
-                int b = 0;
-                while (b < 1) {
-                    Thread.sleep(sleepTime_);
+                while(true) {
+                    byte[] buffer = new byte[bufferSize_];
+                    int b = 0;
+                    while (b < 1) {
+                        Thread.sleep(sleepTime_);
+                        buffer = new byte[bufferSize_];
+                        b = rx.read(buffer);
+                        if (connection.getInetAddress().isReachable(100)) {
+                            //System.out.println("Client disconnected");
+                            break;
+                        }
+                    }
 
-                    buffer = new byte[bufferSize_];
-                    b = rx.read(buffer);
-                    if (connection.getInetAddress().isReachable(10)){
-                        System.out.println("Client disconnected");
-                        break;
+                    if (b > 0) {
+                        byte[] message = new byte[b];
+                        System.arraycopy(buffer, 0, message, 0, b);
+                        String s = new String(message);
+                        TimeStamp timeStamp = new TimeStamp();
+                        DirAndFile dirAndFile = new DirAndFile();
+                        String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
+                        dirAndFile.writeFile(new String[]{directory, timeStamp.getFile(), s});
                     }
                 }
 
-                if (b > 0) {
-                    byte[] message = new byte[b];
-                    System.arraycopy(buffer, 0, message, 0, b);
-                    String s = new String(message);
-                    TimeStamp timeStamp = new TimeStamp();
-                    DirAndFile dirAndFile = new DirAndFile();
-                    String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
-                    dirAndFile.writeFile(new String[]{directory, timeStamp.getFile(), s});
-                }
             }
             catch (SocketTimeoutException e) {
                 // no incoming data - just ignore

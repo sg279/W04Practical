@@ -31,7 +31,6 @@ public class Client {
         while(true){
             try {
                 tx = connection.getOutputStream();
-                rx = connection.getInputStream();
                 b = 0;
 
                 buffer = new byte[bufferSize_];
@@ -42,16 +41,8 @@ public class Client {
                 if (b > 0) {
                     byte[] message = new byte[b];
                     System.arraycopy(buffer, 0, message, 0, b);
-                    String s = new String(message);
                     tx.write(message, 0, b); // send to server
                     System.out.println("Sending " + b + " bytes");
-                }
-
-                buffer = new byte[bufferSize_];
-                b = rx.read(buffer); // from server
-                if (b > 0) {
-                    String s = new String(buffer); /// assume it is a printable string
-                    System.out.println("Received " + b + " bytes --> " + s);
                 }
             }
 
@@ -63,7 +54,7 @@ public class Client {
             }
         }
 
-    } // main()
+    }
 
     static Socket startClient(String hostname, String portnumber) {
         Socket connection = null;
