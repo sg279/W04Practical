@@ -43,6 +43,7 @@ public class Client {
                     System.arraycopy(buffer, 0, message, 0, b);
                     tx.write(message, 0, b); // send to server
                     System.out.println("Sending " + b + " bytes");
+
                 }
             }
 
