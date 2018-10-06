@@ -16,14 +16,16 @@ public class FileReader {
 
             }
         }
+        return null;
     }
 
     private String readFile(File file){
         try{
             if (file.isFile()){
-                BufferedReader reader = new BufferedReader(new FileReader());
+                //BufferedReader reader = new BufferedReader(new FileReader());
             }
         }
         catch(Exception e){}
+        return null;
     }
 }

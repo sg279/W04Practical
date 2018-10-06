@@ -41,11 +41,11 @@ public class Server {
                         Thread.sleep(sleepTime_);
                         buffer = new byte[bufferSize_];
                         b = rx.read(buffer);
-                        if (!connection.getInetAddress().isReachable(5)) {
+                        /*if (!connection.getInetAddress().isReachable(5)) {
                             connection.close();
                             System.out.println("Client disconnected");
                             break;
-                        }
+                        }*/
 
                     }
 
@@ -53,7 +53,18 @@ public class Server {
                         byte[] message = new byte[b];
                         System.arraycopy(buffer, 0, message, 0, b);
                         String s = new String(message);
+                        if (s.startsWith(":")){
+                            String command = s.substring(1);
+                            if(command.equals("close")){
+                                connection.close();
+                                System.out.println("Client disconnected");
+                                break;
+                            }
+                            else{
+                                System.out.println("Invalid Command!");
+                            }
 
+                        }
                         TimeStamp timeStamp = new TimeStamp();
                         DirAndFile dirAndFile = new DirAndFile();
                         String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";

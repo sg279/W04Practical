@@ -15,6 +15,7 @@ public class Client {
     static int bufferSize_ = 140; // a line
     static int soTimeout_ = 10; // milliseconds
     static Socket       connection;
+    static OutputStream tx;
 
     public static void main(String[] args) {
         if (args.length != 2) { // user has not provided arguments
@@ -22,7 +23,7 @@ public class Client {
             System.exit(0);
         }
 
-        OutputStream tx;
+
         InputStream	 rx;
         byte[]       buffer;
         int          b ;
@@ -32,7 +33,6 @@ public class Client {
             try {
                 tx = connection.getOutputStream();
                 b = 0;
-
                 buffer = new byte[bufferSize_];
                 if (System.in.available() > 0) {
                     b = System.in.read(buffer); // keyboard
@@ -82,6 +82,8 @@ public class Client {
 
     protected void finalize() { // tidy up when program ends
         try {
+            String command = ":close";
+            tx.write(command.getBytes());
             connection.close();
         }
 
