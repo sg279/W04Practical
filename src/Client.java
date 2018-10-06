@@ -82,8 +82,9 @@ public class Client {
 
     protected void finalize() { // tidy up when program ends
         try {
-            String command = ":close";
-            tx.write(command.getBytes());
+            byte[] disconnect = new byte[0];
+            disconnect[0]=0;
+            tx.write(disconnect);
             connection.close();
         }
 

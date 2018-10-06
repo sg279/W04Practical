@@ -26,7 +26,6 @@ public class Server {
                 Socket connection;
                 InputStream rx;
                 connection = server_.accept(); // waits for connection
-                boolean clientActive = true;
                 rx = connection.getInputStream();
                 //server_.close(); // no need to wait now
 
@@ -41,11 +40,11 @@ public class Server {
                         Thread.sleep(sleepTime_);
                         buffer = new byte[bufferSize_];
                         b = rx.read(buffer);
-                        /*if (!connection.getInetAddress().isReachable(5)) {
+                        if (buffer[0]==0){
                             connection.close();
                             System.out.println("Client disconnected");
                             break;
-                        }*/
+                        }
 
                     }
 
@@ -54,21 +53,25 @@ public class Server {
                         System.arraycopy(buffer, 0, message, 0, b);
                         String s = new String(message);
                         if (s.startsWith(":")){
-                            String command = s.substring(1);
-                            if(command.equals("close")){
-                                connection.close();
-                                System.out.println("Client disconnected");
-                                break;
+                            FileReader reader = new FileReader();
+                            String command = s.trim().substring(1);
+                            if(command.equals("today")){
+                                System.out.println(reader.getTodaysMessages());
+                            }
+                            if(command.startsWith("get ")){
+                                reader.getMessages(command.substring(4));
                             }
                             else{
                                 System.out.println("Invalid Command!");
                             }
 
                         }
-                        TimeStamp timeStamp = new TimeStamp();
-                        DirAndFile dirAndFile = new DirAndFile();
-                        String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
-                        dirAndFile.writeFile(new String[]{directory, timeStamp.getFile(), s});
+                        else{
+                            TimeStamp timeStamp = new TimeStamp();
+                            DirAndFile dirAndFile = new DirAndFile();
+                            String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
+                            dirAndFile.writeFile(new String[]{directory, timeStamp.getFile(), s});
+                        }
                     }
                 }
 
