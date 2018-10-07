@@ -25,9 +25,8 @@ public class Server {
             try {
                 Socket connection;
                 InputStream rx;
-                connection = server_.accept(); // waits for connection
+                connection = server_.accept();
                 rx = connection.getInputStream();
-                //server_.close(); // no need to wait now
 
                 System.out.println("New connection ... " +
                         connection.getInetAddress().getHostName() + ":" +
@@ -54,12 +53,24 @@ public class Server {
                         String s = new String(message);
                         if (s.startsWith(":")){
                             FileReader reader = new FileReader();
-                            String command = s.trim().substring(1);
+                            String command = s.trim().substring(1).toLowerCase();
                             if(command.equals("today")){
                                 System.out.println(reader.getTodaysMessages());
                             }
-                            if(command.startsWith("get ")){
-                                reader.getMessages(command.substring(4));
+                            else if(command.startsWith("get ")){
+                                System.out.println(reader.getMessages(command.substring(4)));
+                            }
+                            else if(command.startsWith("delete ")){
+                                System.out.println(reader.deleteDirectory(command.substring(7)));
+                            }
+                            else if(command.startsWith("deletemessage ")){
+                                System.out.println(reader.deleteMessage(command.substring(14)));
+                            }
+                            else if(command.equals("help")){
+                                System.out.println("today- Prints all of today's messages\n" +
+                                        "get <yyyy-MM-dd>- Prints all messages for a given day\n" +
+                                        "delete <yyyy-mm-dd>- Deletes all messages for a given day\n" +
+                                        "deletemessage <yyyy-MM-dd_HH:mm:ss.SSS>- Deletes a messages for a given day and time");
                             }
                             else{
                                 System.out.println("Invalid Command!");
