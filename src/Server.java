@@ -12,33 +12,34 @@ import java.net.*;
  */
 public class Server {
 
-    static int           port_ = 51251; // You need to change this!
-    static ServerSocket  server_;
-    static int           sleepTime_ = 100; // milliseconds
-    static int           bufferSize_ = 140; // a line
+    static int           port = 51251; // You need to change this!
+    static ServerSocket  server;
+    static int           sleepTime = 100; // milliseconds
+    static int           bufferSize = 140; // a line
 
     public static void main(String[] args) {
+
         startServer();
 
         while (true) {
 
             try {
                 Socket connection;
-                InputStream rx;
-                connection = server_.accept();
-                rx = connection.getInputStream();
+                InputStream input;
+                connection = server.accept();
+                input = connection.getInputStream();
 
                 System.out.println("New connection ... " +
                         connection.getInetAddress().getHostName() + ":" +
                         connection.getPort());
 
                 while(true) {
-                    byte[] buffer = new byte[bufferSize_];
+                    byte[] buffer = new byte[bufferSize];
                     int b = 0;
                     if (b < 1) {
-                        Thread.sleep(sleepTime_);
-                        buffer = new byte[bufferSize_];
-                        b = rx.read(buffer);
+                        Thread.sleep(sleepTime);
+                        buffer = new byte[bufferSize];
+                        b = input.read(buffer);
                         if (buffer[0]==0){
                             connection.close();
                             System.out.println("Client disconnected");
@@ -81,7 +82,7 @@ public class Server {
                             TimeStamp timeStamp = new TimeStamp();
                             DirAndFile dirAndFile = new DirAndFile();
                             String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
-                            dirAndFile.writeFile(new String[]{directory, timeStamp.getFile(), s});
+                            dirAndFile.writeFile(directory, timeStamp.getFile(), s);
                         }
                     }
                 }
@@ -102,8 +103,8 @@ public class Server {
 
     public static void startServer() {
         try {
-            server_ = new ServerSocket(port_); // make a socket
-            System.out.println("--* Starting server " + server_.toString());
+            server = new ServerSocket(port); // make a socket
+            System.out.println("--* Starting server " + server.toString());
         }
 
         catch (IOException e) {
@@ -113,7 +114,7 @@ public class Server {
 
     protected void finalize() { // tidy up when program ends
         try {
-            server_.close();
+            server.close();
         }
 
         catch (IOException e) {
