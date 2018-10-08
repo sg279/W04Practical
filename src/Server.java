@@ -12,6 +12,7 @@ import java.net.*;
  */
 public class Server {
 
+    //Define the static properties for the server
     static int           port = 51251; // You need to change this!
     static Socket connection;
     static OutputStream output;
@@ -25,30 +26,42 @@ public class Server {
 
     public static void main(String[] args) {
 
+        //Call the startServer method
         startServer();
-
+        //Loop the following
         while (true) {
-
+            //Try the following
             try {
+                //Create a new InputStream object called input
                 InputStream input;
+                //Wait for a connection request, then set the socket to the connection made to the server socket
                 connection = server.accept();
+                //Set the input stream object to the connection's input stream
                 input = connection.getInputStream();
-
+                //Instantiate a boolean called clientConnected as true
+                boolean clientConnected = true;
+                //Output that a connection was made and the inet address, host name, and port of the client
                 System.out.println("New connection ... " +
                         connection.getInetAddress().getHostName() + ":" +
                         connection.getPort());
-
-                while(true) {
+                //While the client connected boolean is true do the following
+                while(clientConnected) {
+                    //Create a new array of bytes called buffer
                     byte[] buffer = new byte[bufferSize];
+                    //Instantiate an integer called b as 0
                     int b = 0;
+                    //If b is less than one do the following
                     if (b < 1) {
+                        //Call the sleep method on the thread with the sleepTime parameter
                         Thread.sleep(sleepTime);
-                        buffer = new byte[bufferSize];
+                        //Set b to the input stream read to the buffer array
                         b = input.read(buffer);
+                        //If first item in the array is 0 (null) close the connection and output that the client has
+                        //disconnected, then set clientConnected to false
                         if (buffer[0]==0){
                             connection.close();
                             System.out.println("Client disconnected");
-                            break;
+                            clientConnected = false;
                         }
 
                     }
