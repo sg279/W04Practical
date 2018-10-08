@@ -13,8 +13,8 @@ import java.net.*;
 public class Client {
 
     //Define static properties for the client
-    static int bufferSize = 140; // a line
-    static int timeout = 10; // milliseconds
+    static int bufferSize = 140;
+    static int timeout = 10;
     static Socket connection;
     static OutputStream output;
 
@@ -59,9 +59,13 @@ public class Client {
                     System.out.println("Sending " + b + " bytes");
 
                 }
-                InputStream rx = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(rx));
+                //Create a new input stream from the input stream of the connection
+                InputStream input = connection.getInputStream();
+                //Create a new buffered reader from the input stream
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                //Instantiate a string as the first line of the input stream
                 String line=reader.readLine();
+                //While the line string isn't null, print it and read the next line
                 while(line!=null){
                     System.out.println(line);
                     line=reader.readLine();

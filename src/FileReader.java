@@ -45,6 +45,7 @@ public class FileReader {
         if (!folder.isDirectory()){
             return "No such directory exists!";
         }
+        //If not, for each file in the directory add the content and time it was created to the messages string and return that string after the loop is finished
         else{
             for (File file: folder.listFiles()
             ) {
@@ -54,11 +55,20 @@ public class FileReader {
         return "Messages for "+directory+" are:\n"+messages;
     }
 
+    /**
+     * This method deletes a given directory
+     * @param directory The directory to be deleted
+     * @return A message confirming the directory has been deleted or that it doesn't exist
+     */
     public String deleteDirectory(String directory){
+        //Create a new file object called folder at the same location as the php with the directory parameter added
         File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+directory);
+        //If folder isn't a directory print that the directory doesn't exist
         if (!folder.isDirectory()){
             return "No such directory exists!";
         }
+        //If not, for each file in the directory delete the file, then, after the loop has finished delete the folder
+        //and print that the directory was deleted
         else{
             for (File file: folder.listFiles()
             ) {
@@ -69,11 +79,21 @@ public class FileReader {
         }
     }
 
+    /**
+     * This method deletes a message sent at a specific date and time
+     * @param message The location and file name of the file to be deleted
+     * @return A message confirming if the message was deleted or that it doesn't exist
+     */
     public String deleteMessage(String message){
+        //Create a new file object called folder at the same location as the php with the first 11 characters
+        //of the mssage parameter (the date) added
         File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+message.substring(0,10));
+        //If folder isn't a directory print that there are no messages for that day
         if (!folder.isDirectory()){
-            return "No such directory exists!";
+            return "No messages for that day!";
         }
+        //If not, define a string as message does not exist, and for each file in the folder if the file's name is the one
+        //that the user specified delete it and change the return message to say that the message was deleted and return it
         else{
             String returnMessage = "Message does not exist!";
             for (File file: folder.listFiles()
@@ -88,15 +108,27 @@ public class FileReader {
         }
     }
 
+    /**
+     * This method reads the content of a plain text file and returns it
+     * @param file The file to be read
+     * @return The content of the file
+     */
     private String readFile(File file){
+        //Create a null string called message
         String message=null;
+        //Try the following
         try{
+            //If the file is a file, create a new buffered reader for the file and set the message string to it's content
             if (file.isFile()){
                 BufferedReader reader = new BufferedReader(new java.io.FileReader(file));
                 message = reader.readLine();
             }
         }
-        catch(Exception e){}
+        //If an exception is thrown set the return message to alert that there was an error reading the file
+        catch(Exception e){
+            message = "File read error!";
+        }
+        //Return the return message
         return message;
     }
 }
