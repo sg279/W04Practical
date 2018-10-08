@@ -13,12 +13,12 @@ public class FileReader {
     public String getTodaysMessages(){
         //Create a new TimeStamp object called timeStamp
         TimeStamp timeStamp = new TimeStamp();
-        //Create a null string called messages
-        String messages=null;
+        //Create an empty string called messages
+        String messages="";
         //Create a new file object called folder at the same location as the php with the getDirectory method called to get the date
         File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+timeStamp.getDirectory());
         //If folder isn't a directory print that there are no messages for today
-        if (!folder.isDirectory()){
+        if (folder.listFiles().length==0){
             return "No messages today!";
         }
         //If not, for each file in the directory add the content and time it was created to the messages string and return that string after the loop is finished
@@ -37,8 +37,8 @@ public class FileReader {
      * @return The messages sent on that date and their times
      */
     public String getMessages(String directory){
-        //Create a null string called messages
-        String messages=null;
+        //Create an empty string called messages
+        String messages="";
         //Create a new file object called folder at the same location as the php with the directory parameter added
         File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+directory);
         //If folder isn't a directory print that the directory doesn't exist

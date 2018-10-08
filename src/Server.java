@@ -13,9 +13,15 @@ import java.net.*;
 public class Server {
 
     static int           port = 51251; // You need to change this!
+    static Socket connection;
+    static OutputStream output;
     static ServerSocket  server;
     static int           sleepTime = 100; // milliseconds
     static int           bufferSize = 140; // a line
+    static String commands = "today- Prints all of today's messages\n" +
+            "get <yyyy-MM-dd>- Prints all messages for a given day\n" +
+            "delete <yyyy-mm-dd>- Deletes all messages for a given day\n" +
+            "deletemessage <yyyy-MM-dd_HH:mm:ss.SSS>- Deletes a messages for a given day and time";
 
     public static void main(String[] args) {
 
@@ -24,7 +30,6 @@ public class Server {
         while (true) {
 
             try {
-                Socket connection;
                 InputStream input;
                 connection = server.accept();
                 input = connection.getInputStream();
@@ -53,30 +58,8 @@ public class Server {
                         System.arraycopy(buffer, 0, message, 0, b);
                         String s = new String(message);
                         if (s.startsWith(":")){
-                            FileReader reader = new FileReader();
                             String command = s.trim().substring(1).toLowerCase();
-                            if(command.equals("today")){
-                                System.out.println(reader.getTodaysMessages());
-                            }
-                            else if(command.startsWith("get ")){
-                                System.out.println(reader.getMessages(command.substring(4)));
-                            }
-                            else if(command.startsWith("delete ")){
-                                System.out.println(reader.deleteDirectory(command.substring(7)));
-                            }
-                            else if(command.startsWith("deletemessage ")){
-                                System.out.println(reader.deleteMessage(command.substring(14)));
-                            }
-                            else if(command.equals("help")){
-                                System.out.println("today- Prints all of today's messages\n" +
-                                        "get <yyyy-MM-dd>- Prints all messages for a given day\n" +
-                                        "delete <yyyy-mm-dd>- Deletes all messages for a given day\n" +
-                                        "deletemessage <yyyy-MM-dd_HH:mm:ss.SSS>- Deletes a messages for a given day and time");
-                            }
-                            else{
-                                System.out.println("Invalid Command!");
-                            }
-
+                            commandHandler(command);
                         }
                         else{
                             TimeStamp timeStamp = new TimeStamp();
@@ -117,6 +100,46 @@ public class Server {
             server.close();
         }
 
+        catch (IOException e) {
+            System.err.println("IO Exception: " + e.getMessage());
+        }
+    }
+
+    private static void commandHandler (String command){
+
+        try{
+            OutputStream output = connection.getOutputStream();
+            FileReader reader = new FileReader();
+            String clientMessage;
+            if(command.equals("today")){
+                clientMessage=reader.getTodaysMessages();
+                System.out.println(clientMessage);
+                output.write((clientMessage+"\n").getBytes());
+            }
+            else if(command.startsWith("get ")){
+                clientMessage = reader.getMessages(command.substring(4));
+                System.out.println(clientMessage);
+                output.write((clientMessage+"\n").getBytes());
+            }
+            else if(command.startsWith("delete ")){
+                clientMessage = reader.deleteDirectory(command.substring(7));
+                System.out.println(clientMessage);
+                output.write((clientMessage+"\n").getBytes());
+            }
+            else if(command.startsWith("deletemessage ")){
+                clientMessage = reader.deleteMessage(command.substring(14));
+                System.out.println(clientMessage);
+                output.write((clientMessage+"\n").getBytes());
+            }
+            else if(command.equals("help")){
+                System.out.println(commands);
+                output.write((commands+"\n").getBytes());
+            }
+            else{
+                System.out.println("Invalid command!");
+                output.write("Invalid command!".getBytes());
+            }
+        }
         catch (IOException e) {
             System.err.println("IO Exception: " + e.getMessage());
         }

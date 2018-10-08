@@ -59,6 +59,14 @@ public class Client {
                     System.out.println("Sending " + b + " bytes");
 
                 }
+                InputStream rx = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(rx));
+                String line=reader.readLine();
+                while(line!=null){
+                    System.out.println(line);
+                    line=reader.readLine();
+                }
+
             }
             catch (SocketTimeoutException e) {
                 // no incoming data - just ignore
