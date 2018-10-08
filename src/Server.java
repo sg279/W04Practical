@@ -66,18 +66,28 @@ public class Server {
 
                     }
 
+                    //If b is more than 0 do the following
                     if (b > 0) {
+                        //Create a new array of bytes of size b called message
                         byte[] message = new byte[b];
+                        //Copy the buffer array to the message array
                         System.arraycopy(buffer, 0, message, 0, b);
+                        //Create a string called s from the message array
                         String s = new String(message);
+                        //If s starts with : call the commandHandler method on the rest of the string trimmed and parsed to lower case
                         if (s.startsWith(":")){
                             String command = s.trim().substring(1).toLowerCase();
                             commandHandler(command);
                         }
+                        //Otherwise, do the following
                         else{
+                            //Create a new TimeStamp object called timeStamp
                             TimeStamp timeStamp = new TimeStamp();
+                            //Create a new DirAndFile object called DirAndFile
                             DirAndFile dirAndFile = new DirAndFile();
+                            //Create a string called directory at the location of the php with the timeStamp.getDirectory method added
                             String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
+                            //Call the writeFile method on the dirAndFile object with the directory, timeStamp's getFile method, and s as parameters
                             dirAndFile.writeFile(directory, timeStamp.getFile(), s);
                         }
                     }
@@ -87,6 +97,7 @@ public class Server {
             catch (SocketTimeoutException e) {
                 // no incoming data - just ignore
             }
+            //If exceptions are thrown print them
             catch (InterruptedException e) {
                 System.err.println("Interrupted Exception: " + e.getMessage());
             }
@@ -96,7 +107,10 @@ public class Server {
         }
     }
 
-
+    /**
+     * This method sets the server socket to a new socket at the specified port, prints that a server is starting
+     * and print an exception if one is thrown
+     */
     public static void startServer() {
         try {
             server = new ServerSocket(port); // make a socket
@@ -108,6 +122,9 @@ public class Server {
         }
     }
 
+    /**
+     * This is an overridden method that runs when the program closes. It attempts to close the server and prints an exception if one is thrown
+     */
     protected void finalize() { // tidy up when program ends
         try {
             server.close();
@@ -118,12 +135,21 @@ public class Server {
         }
     }
 
+    /**
+     * This method handles commands that are sent to the server from the client
+     * @param command The user's command
+     */
     private static void commandHandler (String command){
-
+        //Try the following
         try{
+            //Create a new output stream from the connection
             OutputStream output = connection.getOutputStream();
+            //Create a new FileReader object called FileReader
             FileReader reader = new FileReader();
+            //Create a new string called clientMessage
             String clientMessage;
+            //Based on the command, set the clientMessage string to the corresponding method from the file reader, output
+            //the clientMessage string and write it to the output stream. If the command isn't recognised alert the user
             if(command.equals("today")){
                 clientMessage=reader.getTodaysMessages();
                 System.out.println(clientMessage);
@@ -153,6 +179,7 @@ public class Server {
                 output.write("Invalid command!".getBytes());
             }
         }
+        //Print an exception if it is thrown
         catch (IOException e) {
             System.err.println("IO Exception: " + e.getMessage());
         }
