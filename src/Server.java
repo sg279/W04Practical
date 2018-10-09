@@ -16,13 +16,16 @@ public class Server {
     static int           port = 51251; // You need to change this!
     static Socket connection;
     static OutputStream output;
+    static InputStream input;
     static ServerSocket  server;
     static int           sleepTime = 100; // milliseconds
     static int           bufferSize = 140; // a line
-    static String commands = "today- Prints all of today's messages\n" +
+    static String commands = "Start typing to send a message or use a : to enter one of the following commands:\n" +
+            "today- Prints all of today's messages\n" +
             "get <yyyy-MM-dd>- Prints all messages for a given day\n" +
             "delete <yyyy-mm-dd>- Deletes all messages for a given day\n" +
-            "deletemessage <yyyy-MM-dd_HH:mm:ss.SSS>- Deletes a messages for a given day and time";
+            "deletemessage <yyyy-MM-dd_HH:mm:ss.SSS>- Deletes a messages for a given day and time\n" +
+            "help- print this instruction set";
 
     public static void main(String[] args) {
 
@@ -32,12 +35,14 @@ public class Server {
         while (true) {
             //Try the following
             try {
-                //Create a new InputStream object called input
-                InputStream input;
                 //Wait for a connection request, then set the socket to the connection made to the server socket
                 connection = server.accept();
-                //Set the input stream object to the connection's input stream
+                //Set the input stream property to the connection's input stream
                 input = connection.getInputStream();
+                //Set the output stream to the connection's output stream
+                output=connection.getOutputStream();
+                //Write the commands string to the output stream
+                output.write((commands+"\n").getBytes());
                 //Instantiate a boolean called clientConnected as true
                 boolean clientConnected = true;
                 //Output that a connection was made and the inet address, host name, and port of the client
@@ -142,8 +147,6 @@ public class Server {
     private static void commandHandler (String command){
         //Try the following
         try{
-            //Create a new output stream from the connection
-            OutputStream output = connection.getOutputStream();
             //Create a new FileReader object called FileReader
             FileReader reader = new FileReader();
             //Create a new string called clientMessage
@@ -176,7 +179,7 @@ public class Server {
             }
             else{
                 System.out.println("Invalid command!");
-                output.write("Invalid command!".getBytes());
+                output.write("Invalid command!\n".getBytes());
             }
         }
         //Print an exception if it is thrown

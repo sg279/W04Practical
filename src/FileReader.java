@@ -17,8 +17,8 @@ public class FileReader {
         String messages="";
         //Create a new file object called folder at the same location as the php with the getDirectory method called to get the date
         File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+timeStamp.getDirectory());
-        //If folder isn't a directory print that there are no messages for today
-        if (folder.listFiles().length==0){
+        //If folder isn't a directory or there are no files in it print that there are no messages for today
+        if (!folder.isDirectory()||folder.listFiles().length==0){
             return "No messages today!";
         }
         //If not, for each file in the directory add the content and time it was created to the messages string and return that string after the loop is finished
@@ -85,27 +85,36 @@ public class FileReader {
      * @return A message confirming if the message was deleted or that it doesn't exist
      */
     public String deleteMessage(String message){
-        //Create a new file object called folder at the same location as the php with the first 11 characters
-        //of the mssage parameter (the date) added
-        File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+message.substring(0,10));
-        //If folder isn't a directory print that there are no messages for that day
-        if (!folder.isDirectory()){
-            return "No messages for that day!";
-        }
-        //If not, define a string as message does not exist, and for each file in the folder if the file's name is the one
-        //that the user specified delete it and change the return message to say that the message was deleted and return it
-        else{
-            String returnMessage = "Message does not exist!";
-            for (File file: folder.listFiles()
-            ) {
-                if(file.getName().equals(message)){
-                    file.delete();
-                    returnMessage = "Message deleted!";
-                }
+        //Try the following
+        try{
+            //Create a new file object called folder at the same location as the php with the first 11 characters
+            //of the mssage parameter (the date) added
+            File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+message.substring(0,10));
+            //If folder isn't a directory print that there are no messages for that day
+            if (!folder.isDirectory()){
+                return "No messages for that day!";
             }
+            //If not, define a string as message does not exist, and for each file in the folder if the file's name is the one
+            //that the user specified delete it and change the return message to say that the message was deleted and return it
+            else{
+                String returnMessage = "Message does not exist!";
+                for (File file: folder.listFiles()
+                ) {
+                    if(file.getName().equals(message)){
+                        file.delete();
+                        returnMessage = "Message deleted!";
+                    }
+                }
 
-            return returnMessage;
+                return returnMessage;
+            }
         }
+        //If an index out of bound exception is thrown (the user entered a file name less than 11 characters)
+        //print that the message doesn't exist
+        catch(IndexOutOfBoundsException e){
+            return "Message does not exist!";
+        }
+
     }
 
     /**
