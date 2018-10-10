@@ -159,9 +159,14 @@ public class Server {
                 output.write((clientMessage+"\n").getBytes());
             }
             else if(command.startsWith("get ")){
-                clientMessage = reader.getMessages(command.substring(4));
-                System.out.println(clientMessage);
-                output.write((clientMessage+"\n").getBytes());
+                if(command.contains("../")){
+                    clientMessage = "You do not have permission to read that!";
+                }
+                else{
+                    clientMessage = reader.getMessages(command.substring(4));
+                    System.out.println(clientMessage);
+                    output.write((clientMessage+"\n").getBytes());
+                }
             }
             else if(command.startsWith("delete ")){
                 if(command.contains("../")){
