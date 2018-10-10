@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * This class contains methods for reading and deleting messages in the directory
@@ -21,9 +22,12 @@ public class FileReader {
         if (!folder.isDirectory()||folder.listFiles().length==0){
             return "No messages today!";
         }
-        //If not, for each file in the directory add the content and time it was created to the messages string and return that string after the loop is finished
+        //If not, make an array of each file in the direcotry and sort it. Then, for each file in the array, add the content
+        //and time it was created to the messages string and return that string after the loop is finished
         else{
-            for (File file: folder.listFiles()
+            File[] files = folder.listFiles();
+            Arrays.sort(files);
+            for (File file: files
                  ) {
                 messages += "\n"+readFile(file)+" at "+file.getName().substring(11);
             }
@@ -45,9 +49,12 @@ public class FileReader {
         if (!folder.isDirectory()){
             return "No such directory exists!";
         }
-        //If not, for each file in the directory add the content and time it was created to the messages string and return that string after the loop is finished
+        //If not, make an array of each file in the direcotry and sort it. Then, for each file in the array, add the content
+        //and time it was created to the messages string and return that string after the loop is finished
         else{
-            for (File file: folder.listFiles()
+            File[] files = folder.listFiles();
+            Arrays.sort(files);
+            for (File file: files
             ) {
                 messages += "\n"+readFile(file)+" at "+file.getName().substring(11);
             }

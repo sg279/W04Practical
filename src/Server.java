@@ -93,7 +93,7 @@ public class Server {
                             //Create a string called directory at the location of the php with the timeStamp.getDirectory method added
                             String directory = "/cs/home/sg279/nginx_default/cs2003/Net1/" + timeStamp.getDirectory() + "/";
                             //Call the writeFile method on the dirAndFile object with the directory, timeStamp's getFile method, and s as parameters
-                            dirAndFile.writeFile(directory, timeStamp.getFile(), s);
+                            output.write(dirAndFile.writeFile(directory, timeStamp.getFile(), s).getBytes());
                         }
                     }
                 }
@@ -164,13 +164,23 @@ public class Server {
                 output.write((clientMessage+"\n").getBytes());
             }
             else if(command.startsWith("delete ")){
-                clientMessage = reader.deleteDirectory(command.substring(7));
-                System.out.println(clientMessage);
+                if(command.contains("../")){
+                    clientMessage = "You do not have permission to delete that!";
+                }
+                else{
+                    clientMessage = reader.deleteDirectory(command.substring(7));
+                    System.out.println(clientMessage);
+                }
                 output.write((clientMessage+"\n").getBytes());
             }
             else if(command.startsWith("deletemessage ")){
-                clientMessage = reader.deleteMessage(command.substring(14));
-                System.out.println(clientMessage);
+                if(command.contains("../")||command.contains("php")){
+                    clientMessage = "You do not have permission to delete that!";
+                }
+                else {
+                    clientMessage = reader.deleteMessage(command.substring(14));
+                    System.out.println(clientMessage);
+                }
                 output.write((clientMessage+"\n").getBytes());
             }
             else if(command.equals("help")){

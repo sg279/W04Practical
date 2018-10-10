@@ -16,33 +16,41 @@ public class DirAndFile {
      * @param directory The directory where the file will be written
      * @param fileName The name of the file
      * @param text The content of the file
+     * @return The message to be output to the client
      */
-    public void writeFile(String directory, String fileName, String text) {
-
+    public String writeFile(String directory, String fileName, String text) {
+        //Create an empty string called output
+        String output = "";
         //Create a new file called dir from the directory parameter
         File dir = new File(directory);
         //If the file exists do the following
         if (dir.exists()) {
-            //Print that the directory already exists
+            //Print and add to the output that the directory already exists
             System.out.println("++ File already exists: " + directory);
+            output+=("++ File already exists: " + directory+"\n");
             //Call the write method with the directory, fileName, and text as parameters
             write(directory, fileName, text);
-            //Output that the content was written to the the file
+            //Print and add to the output that the content was written to the the file
             System.out.println("++ Wrote " + text + " to file: " + fileName);
+            output+=("++ Wrote " + text + " to file: " + fileName+"\n");
         }
         //Otherwise, if the directory is able to be created do the following
         else if (dir.mkdir()) {
-            //Print that the directory was created
+            //Print and add to the output that the directory was created
             System.out.println("++ Created directory: " + directory);
+            output+=("++ Created directory: " + directory+"\n");
             //Call the write method with the directory, fileName, and text as parameters
             write(directory, fileName, text);
-            //Print that the text was written to the file
+            //Print and add to the output that the text was written to the file
             System.out.println("++ Wrote " + text + " to file: " + fileName);
+            output+=("++ Wrote " + text + " to file: " + fileName+"\n");
         }
-        //Otherwise, print that the directory couldn't be created
+        //Otherwise, print and add to the output that the directory couldn't be created
         else {
             System.out.println("++ Failed to create directory: " + directory);
+            output+=("++ Failed to create directory: " + directory+"\n");
         }
+        return output;
 
 
     }
