@@ -165,8 +165,8 @@ public class Server {
                 else{
                     clientMessage = reader.getMessages(command.substring(4));
                     System.out.println(clientMessage);
-                    output.write((clientMessage+"\n").getBytes());
                 }
+                output.write((clientMessage+"\n").getBytes());
             }
             else if(command.startsWith("delete ")){
                 if(command.contains("../")){
