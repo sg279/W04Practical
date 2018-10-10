@@ -18,7 +18,7 @@ public class FileReader {
         String messages="";
         //Create a new file object called folder at the same location as the php with the getDirectory method called to get the date
         File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+timeStamp.getDirectory());
-        //If folder isn't a directory or there are no files in it print that there are no messages for today
+        //If folder isn't a directory or there are no files in it return that there are no messages for today
         if (!folder.isDirectory()||folder.listFiles().length==0){
             return "No messages today!";
         }
@@ -45,9 +45,13 @@ public class FileReader {
         String messages="";
         //Create a new file object called folder at the same location as the php with the directory parameter added
         File folder = new File("/cs/home/sg279/nginx_default/cs2003/Net1/"+directory);
-        //If folder isn't a directory print that the directory doesn't exist
+        //If folder isn't a directory return that the directory doesn't exist
         if (!folder.isDirectory()){
             return "No such directory exists!";
+        }
+        //If there are no messages for that day return that there are no messages for that day
+        else if (folder.listFiles().length==0){
+            return "No messages for that day!";
         }
         //If not, make an array of each file in the direcotry and sort it. Then, for each file in the array, add the content
         //and time it was created to the messages string and return that string after the loop is finished
